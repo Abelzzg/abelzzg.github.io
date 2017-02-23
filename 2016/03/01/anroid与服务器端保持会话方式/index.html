@@ -6,17 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abelzzg.com">
-  <title>Archives | abelzzg</title>
+  <title>anroid与服务器端保持会话方式 | abelzzg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="this is a public blog recording some technologic personal articles.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="abelzzg">
-<meta property="og:url" content="http://abelzzg.com/archives/index.html">
+  <meta name="description" content="#anroid与服务器端保持会话方式
+Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.这两种方式都可以通过sessionID的保存来保持和服务端的会话
+####httpClient其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="anroid与服务器端保持会话方式">
+<meta property="og:url" content="http://abelzzg.com/2016/03/01/anroid与服务器端保持会话方式/index.html">
 <meta property="og:site_name" content="abelzzg">
-<meta property="og:description" content="this is a public blog recording some technologic personal articles.">
+<meta property="og:description" content="#anroid与服务器端保持会话方式
+Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.这两种方式都可以通过sessionID的保存来保持和服务端的会话
+####httpClient其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证">
+<meta property="og:updated_time" content="2017-02-23T01:53:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="abelzzg">
-<meta name="twitter:description" content="this is a public blog recording some technologic personal articles.">
+<meta name="twitter:title" content="anroid与服务器端保持会话方式">
+<meta name="twitter:description" content="#anroid与服务器端保持会话方式
+Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.这两种方式都可以通过sessionID的保存来保持和服务端的会话
+####httpClient其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证">
   
   
     <link rel="icon" href="/favicon.png">
@@ -154,36 +161,114 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-anroid与服务器端保持会话方式" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      anroid与服务器端保持会话方式
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/01/anroid与服务器端保持会话方式/" class="archive-article-date">
+
+        
+        <a href="/2016/03/01/anroid与服务器端保持会话方式/" class="archive-article-date">
   	<time datetime="2016-03-01T03:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-01</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/01/anroid与服务器端保持会话方式/">anroid与服务器端保持会话方式</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#anroid与服务器端保持会话方式</p>
+<p><strong>Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.<br>这两种方式都可以通过sessionID的保存来保持和服务端的会话</strong></p>
+<p>####httpClient<br>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
+<pre><code>//定义储存Cookie信息
+private String cookies;
 
-        <div class="article-info info-on-right">
-          
+public void executeGet(String url) throws ClientProtocolException, IOException{
+HttpClient httpClient=new DefaultHttpClient();
+
+HttpGet httpGet=new HttpGet(url);
+setRequestCookies(httpGet);
+
+HttpResponse response=httpClient.execute(httpGet);
+appendCookies(response);
+}
+/**
+* 设置请求的Cookie头信息
+ * @param reqMsg
+*/
+private void setRequestCookies(HttpMessage reqMsg) {
+    if(!TextUtils.isEmpty(cookies)){
+        reqMsg.setHeader(&quot;Cookie&quot;, cookies);
+    }
+}
+/**
+ * 把新的Cookie头信息附加到旧的Cookie后面
+ * 用于下次Http请求发送
+ * @param resMsg
+ */
+private void appendCookies(HttpMessage resMsg) {
+Header setCookieHeader=resMsg.getFirstHeader(&quot;Set-Cookie&quot;);
+if (setCookieHeader != null
+        &amp;&amp; TextUtils.isEmpty(setCookieHeader.getValue())) {
+         String setCookie=setCookieHeader.getValue();
+        if(TextUtils.isEmpty(cookies)){
+            cookies=setCookie;
+        }else{
+            cookies=cookies+&quot;; &quot;+setCookie;
+        }
+    }
+}
+</code></pre><p>当我们需要重新设置Seesion的时候，请求我们保存的cookie即可，这样代码就会重新获取。如果都有个账号并发备份，那么一个账号分配一个cookie变量存储即可，也就是把上面的代码放到一个如HttpManager管理的类里，每个账号的备份都可以new个HttpManager实例，这样每个账号都可以单独处理自己的Cookie，互不干扰。</p>
+<p>####HttpUrlConnection</p>
+<pre><code>获取Cookie： 
+URL url = new URL(requrl);
+HttpURLConnection con= (HttpURLConnection) url.openConnection(); 
+// 取得sessionid. 
+String cookieval = con.getHeaderField(&quot;set-cookie&quot;); 
+String sessionid; 
+if(cookieval != null) { 
+    sessionid = cookieval.substring(0, cookieval.indexOf(&quot;;&quot;)); 
+}
+</code></pre><p>//sessionid值格式：JSESSIONID=AD5F5C9EEB16C71EC3725DBF209F6178，是键值对，不是单指值<br>发送设置cookie：</p>
+<pre><code>URL url = new URL(requrl);
+HttpURLConnectioncon= (HttpURLConnection) url.openConnection(); 
+if(sessionid != null) { 
+con.setRequestProperty(&quot;cookie&quot;, sessionid); 
+}
+</code></pre><p>只要设置了sessionID，这样web服务器在接受请求的时候就会自动搜索对应的session了，从而保证了在同一会话Session。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -195,122 +280,88 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abelzzg.com/2016/03/01/anroid与服务器端保持会话方式/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/22/第一篇blog/" class="archive-article-date">
-  	<time datetime="2016-02-22T08:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-02-22</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/22/第一篇blog/">第一篇blog</a>
-    </h1>
+  
+    <a href="/2016/02/22/第一篇blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">第一篇blog</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/02/12/使用hexo遇到的坑/" class="archive-article-date">
-  	<time datetime="2016-02-12T10:19:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-02-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/02/12/使用hexo遇到的坑/">使用hexo遇到的坑</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/01/22/helloworld/" class="archive-article-date">
-  	<time datetime="2016-01-22T08:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/01/22/helloworld/">helloworld</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -333,8 +384,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
