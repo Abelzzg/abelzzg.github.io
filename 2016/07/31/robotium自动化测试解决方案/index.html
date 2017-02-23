@@ -6,21 +6,35 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abelzzg.com">
-  <title>第一篇正式blog | abelzzg</title>
+  <title>robotium自动化测试解决方案 | abelzzg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="为什么要有自己的博客刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）
-上稀土掘金去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像">
+  <meta name="description" content="要做自动化测试了为了及时发现并解决版本迭代中遇到的坑爹问题，为救苦大仇深的测试同学于水火，这是研究了好长好长时间的结果，也是对android自动化技术的应用的总结，也加深了自己对android运行原理的了解。github上是自己写的android自动化测试工具SDK，懒得导成jar，自动生成测试报告，自动截图，自动获取控制台log，自动记录每一步操作。解决测试报告不友好、不能自动截图和报告分析的问">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一篇正式blog">
-<meta property="og:url" content="http://abelzzg.com/2016/01/22/第一篇blog/index.html">
+<meta property="og:title" content="robotium自动化测试解决方案">
+<meta property="og:url" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/index.html">
 <meta property="og:site_name" content="abelzzg">
-<meta property="og:description" content="为什么要有自己的博客刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）
-上稀土掘金去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像">
-<meta property="og:updated_time" content="2017-02-23T02:02:31.000Z">
+<meta property="og:description" content="要做自动化测试了为了及时发现并解决版本迭代中遇到的坑爹问题，为救苦大仇深的测试同学于水火，这是研究了好长好长时间的结果，也是对android自动化技术的应用的总结，也加深了自己对android运行原理的了解。github上是自己写的android自动化测试工具SDK，懒得导成jar，自动生成测试报告，自动截图，自动获取控制台log，自动记录每一步操作。解决测试报告不友好、不能自动截图和报告分析的问">
+<meta property="og:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-0@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-3@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-2@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-4@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-5@2x.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/jenkins流程图.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/autotest操作图.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/svn.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/checkout.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/build.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/install.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/run.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/publish.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/result.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/mail.png">
+<meta property="og:image" content="http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/testresult.png">
+<meta property="og:updated_time" content="2017-02-23T06:46:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一篇正式blog">
-<meta name="twitter:description" content="为什么要有自己的博客刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）
-上稀土掘金去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像">
+<meta name="twitter:title" content="robotium自动化测试解决方案">
+<meta name="twitter:description" content="要做自动化测试了为了及时发现并解决版本迭代中遇到的坑爹问题，为救苦大仇深的测试同学于水火，这是研究了好长好长时间的结果，也是对android自动化技术的应用的总结，也加深了自己对android运行原理的了解。github上是自己写的android自动化测试工具SDK，懒得导成jar，自动生成测试报告，自动截图，自动获取控制台log，自动记录每一步操作。解决测试报告不友好、不能自动截图和报告分析的问">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-0@2x.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -158,30 +172,79 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-第一篇blog" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-robotium自动化测试解决方案" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      第一篇正式blog
+      robotium自动化测试解决方案
     </h1>
   
 
         
-        <a href="/2016/01/22/第一篇blog/" class="archive-article-date">
-  	<time datetime="2016-01-22T08:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-01-22</time>
+        <a href="/2016/07/31/robotium自动化测试解决方案/" class="archive-article-date">
+  	<time datetime="2016-07-31T02:42:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="为什么要有自己的博客"><a href="#为什么要有自己的博客" class="headerlink" title="为什么要有自己的博客"></a>为什么要有自己的博客</h2><p>刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）</p>
-<h2 id="上稀土掘金"><a href="#上稀土掘金" class="headerlink" title="上稀土掘金"></a>上稀土掘金</h2><p>去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像很高大上。里面记录了一些自己做技术的心得和总结，也有不少是跟技术无关跟心态有关的，非常有意思。逐渐就看上看这些程序猿们的文章，有点志同道合的感觉，但是比起技术来，我就是个渣，但是比起屌丝，我就是屌王。</p>
-<h2 id="反思自己"><a href="#反思自己" class="headerlink" title="反思自己"></a>反思自己</h2><p>突然发现已经毕业三年了，居然没有自己的博客。刚毕业上csdn上写过几篇，可能是自己太肤浅了，毛还没长齐就想写技术博客，发现没有什么浏览量，后来也就懒得写了，再后来上csdn，发现我的文章被封了，不知道为啥，占用你们服务器的内存了吗？那我诚恳的向你们道歉！。都说技术3年是一个坎，要么默默无闻做技术宅男，要么升职加薪做上小领导。回头看看我，除了做android还凑合以外，基本没啥长处，去面试估计也不会有什么好的归宿，所以决心发奋图强开始写blog，监督自己不再虚度时光，况且程序员的职业生涯也不长，就连我妈都知道做这样要不停学习新技术，每天打电话就离不开要问我“最近有没有学习？”“还是要学一些东西的，要不然不好涨工资”。</p>
-<h2 id="关于写作技巧"><a href="#关于写作技巧" class="headerlink" title="关于写作技巧"></a>关于写作技巧</h2><p>从小作文写不好，但是总是能抄到，能蒙混过关，后来抄多了发现，如果哪次考试是自己写的，还能拿到比抄的作文更高一些的分数，后来就变成自己写了，虽然也写不好，但是也算是锻炼。啰嗦完了，准备deploy吧，还没有原创，先把收藏在elephant里面的技术文章copy一下吧！哎，还得转成.md格式的，心累呀……</p>
+        <h1 id="要做自动化测试了"><a href="#要做自动化测试了" class="headerlink" title="要做自动化测试了"></a>要做自动化测试了</h1><p>为了及时发现并解决版本迭代中遇到的坑爹问题，为救苦大仇深的测试同学于水火，这是研究了好长好长时间的结果，也是对android自动化技术的应用的总结，也加深了自己对android运行原理的了解。<a href="https://github.com/Abelzzg/AutoTestProject" target="_blank" rel="external">github上</a>是自己写的android自动化测试工具SDK，懒得导成jar，自动生成测试报告，自动截图，自动获取控制台log，自动记录每一步操作。解决测试报告不友好、不能自动截图和报告分析的问题。</p>
+<p><strong>📣首先跟想直接拿来用的同学说明一下，测试报告生成路径可以自行修改，整个测试报告没有进行压缩，产生截图多时可能会占用设备空间。</strong></p>
+<h2 id="1-测试工具功能："><a href="#1-测试工具功能：" class="headerlink" title="1.测试工具功能："></a>1.测试工具功能：</h2><p>1.1 当测试脚本运行失败时，工具会自动截图，测试报告里相应失败步骤会产生html超级链接，点击链接会看到失败时的截图；</p>
+<p>1.2 当测试脚本运行时，程序突然崩溃，工具会记录异常栈信息和截图，两者也是一html超级链接的形式来展现；</p>
+<p>1.3 测试开发编写测试脚本，测试工具会根据脚本的具体调用产生详细的步骤描述，并体现在测试报告中，方便开发人员解决问题。</p>
+<h2 id="2-测试报告"><a href="#2-测试报告" class="headerlink" title="2.测试报告"></a>2.测试报告</h2><p>测试报告首页</p>
+<p><img src="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-0@2x.png" alt="image"></p>
+<p>点击各测试case标题可以查看各具体用例执行情况</p>
+<p><img src="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-3@2x.png" alt="image"></p>
+<p>点击case标题可以查看执行case时控制台日志</p>
+<p><img src="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-2@2x.png" alt="image"></p>
+<p>当测试步骤中有状态为异常或者失败时，点击状态栏，可以查看运行时失败截图</p>
+<p><img src="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-4@2x.png" alt="image"></p>
+<p>如果执行测试用例时，程序出现崩溃，工具会记录崩溃日志。点击异常日志即可查看崩溃异常栈和一些崩溃时设备信息，方便开发人员分析崩溃原因。</p>
+<p><img src="https://raw.githubusercontent.com/Abelzzg/AutoTestProject/master/Screenshots/QQ20160205-5@2x.png" alt="image"></p>
+<h2 id="3-集成自动化测试解决方案"><a href="#3-集成自动化测试解决方案" class="headerlink" title="3.集成自动化测试解决方案"></a>3.集成自动化测试解决方案</h2><p>实现：用重写的robotium做android自动化测试框架，通过jenkins持续集成来实现自动化测试。自动化测试可以让开发者提交对源码的修改后得到快速的反馈，随时随地生成部署文件，及时反馈测试报告，并提醒相关人员修改BUG，减少产品发布延误时间，减少重复工作量，增强项目可见性。</p>
+<p>主要技术：使用Robotium作为测试框架，Jenkins作为自动化构建平台，Gradle作为Android项目构建工具，并且配合SDK的Tools工具创建自动化测试需要的AVD。</p>
+<p>目的：android自动化测试的目的不是减少Build失败的次数，而是今早发现问题，减少风险和浪费。</p>
+<p>####Robotium介绍：<br>   robotium是自动化测试的框架，类似于selenium，robotium能够方便程序编写健壮、强大的自动化黑盒测试用例，能够模仿普通用户行为。</p>
+<pre><code>优点：1.最短时间需求写出测试用例
+     2.执行用例速度快
+     3.可以整合Jenkins和gradle进行持续集成
+     4.可以在只有APK文件情况下测试
+</code></pre><h3 id="3-1自动化测试Jenkins操作流程"><a href="#3-1自动化测试Jenkins操作流程" class="headerlink" title="3.1自动化测试Jenkins操作流程"></a>3.1自动化测试Jenkins操作流程</h3><p>下面来说一说这个自动化解决方案，到底是怎么解决测试自动化的。</p>
+<p><strong>先来看看jenkins的操作流程</strong></p>
+<p><img src="/2016/07/31/robotium自动化测试解决方案/jenkins流程图.png" alt="jenkins"></p>
+<p><strong>相关人员自动化测试操作流程</strong></p>
+<p><img src="/2016/07/31/robotium自动化测试解决方案/autotest操作图.png" alt="autotest"></p>
+<h3 id="3-2-Jenkins配置说明"><a href="#3-2-Jenkins配置说明" class="headerlink" title="3.2 Jenkins配置说明"></a>3.2 Jenkins配置说明</h3><h4 id="3-2-1-SVN地址配置说明"><a href="#3-2-1-SVN地址配置说明" class="headerlink" title="3.2.1 SVN地址配置说明"></a>3.2.1 SVN地址配置说明</h4><p> jenkins上需要配置从测试和被测试项目的SVN地址，和check到本地的路径</p>
+<ul>
+<li>-Repository URL  ————&gt;为SVN地址</li>
+<li>Local module directory (optional) —————&gt;为本地路径（要求为workspace/yourprojectname）</li>
+</ul>
+<p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/svn.png" alt="svn"></p>
+<h4 id="3-2-2-SVN的checkout策略"><a href="#3-2-2-SVN的checkout策略" class="headerlink" title="3.2.2 SVN的checkout策略"></a>3.2.2 SVN的checkout策略</h4><p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/checkout.png" alt="checkout"></p>
+<h4 id="3-2-3-构建项目"><a href="#3-2-3-构建项目" class="headerlink" title="3.2.3 构建项目"></a>3.2.3 构建项目</h4><p>构建测试和被测试项目，我们这里用到了gradle插件去调用相应项目根目录下的build.gradle文件来构建项目。<br>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/build.png" alt="build"></p>
+<h4 id="3-2-4-安装APK文件"><a href="#3-2-4-安装APK文件" class="headerlink" title="3.2.4 安装APK文件"></a>3.2.4 安装APK文件</h4><p>build完之后，需要在模拟器上安装构建后产生的APK文件，在安装之前需要先卸载之前可能装在模拟器上的apk文件</p>
+<p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/install.png" alt="install"></p>
+<h4 id="3-2-5-执行测试获取测试报告"><a href="#3-2-5-执行测试获取测试报告" class="headerlink" title="3.2.5 执行测试获取测试报告"></a>3.2.5 执行测试获取测试报告</h4><blockquote>
+<p>adb shell am instrument -w you project packagename/com.zutubi.android.junitreport.JUnitReportTestRunner</p>
+<p>adb pull /data/data/you project package name/files/junit-report.xml /Users/yeepaymobile/.jenkins/jobs/your jenkins project name/workspace/</p>
+</blockquote>
+<p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/run.png" alt="run"></p>
+<h4 id="3-2-6-发布测试报告"><a href="#3-2-6-发布测试报告" class="headerlink" title="3.2.6 发布测试报告"></a>3.2.6 发布测试报告</h4><p>利用Junit Test Result Report插件记录每次测试的测试报告，生成每次测试结果的趋势图表</p>
+<p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/publish.png" alt="publish"></p>
+<p>生成结果如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/result.png" alt="result"></p>
+<h4 id="3-2-7-邮件发送构建通知"><a href="#3-2-7-邮件发送构建通知" class="headerlink" title="3.2.7 邮件发送构建通知"></a>3.2.7 邮件发送构建通知</h4><p>测试完成后，通过邮件插件发送邮件给相关收件人员</p>
+<p>配置方式如下：<br><img src="/2016/07/31/robotium自动化测试解决方案/mail.png" alt="mail"></p>
+<p>主要内容模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head lang=&quot;en&quot;&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;$&#123;ENV, var=&quot;JOB_NAME&quot;&#125;-第$&#123;BUILD_NUMBER&#125;次构建日志&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body marginleft=&quot;8&quot;  marginwidth=&quot;0&quot; margintop=&quot;8&quot; marginheight=&quot;4&quot;</div><div class="line">      &gt;</div><div class="line">&lt;table width=&quot;95%&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;</div><div class="line">       style=&quot;font-size: 11pt; font-family: Tahoma, Arial, Helvetica, sans-serif&quot;&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;(本邮件是程序自动下发的，请勿回复！)&lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;&lt;h2&gt;</div><div class="line">            &lt;font color=&quot;#0000FF&quot;&gt;测试结果 - $&#123;BUILD_STATUS&#125;&lt;/font&gt;</div><div class="line">        &lt;/h2&gt;&lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;&lt;br/&gt;</div><div class="line">            &lt;b&gt;&lt;font color=&quot;#0B610B&quot;&gt;构建信息&lt;/font&gt;&lt;/b&gt;</div><div class="line">            &lt;hr size=&quot;2&quot; width=&quot;100%&quot; align=&quot;center&quot;/&gt;</div><div class="line">        &lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;</div><div class="line">            &lt;ul&gt;</div><div class="line">                &lt;li&gt;项目名称&amp;nbsp;：&amp;nbsp;$&#123;PROJECT_NAME&#125;&lt;/li&gt;</div><div class="line">                &lt;li&gt;构建编号&amp;nbsp;：&amp;nbsp;第$&#123;BUILD_NUMBER&#125;次构建&lt;/li&gt;</div><div class="line">                &lt;li&gt;SVN&amp;nbsp;版本：&amp;nbsp;$&#123;SVN_REVISION&#125;&lt;/li&gt;</div><div class="line">                &lt;li&gt;触发原因：&amp;nbsp;$&#123;CAUSE&#125;&lt;/li&gt;</div><div class="line">                &lt;li&gt;构建日志：&amp;nbsp;&lt;a href=&quot;$&#123;BUILD_URL&#125;console&quot;&gt;$&#123;BUILD_URL&#125;console&lt;/a&gt;&lt;/li&gt;</div><div class="line">                &lt;li&gt;构建&amp;nbsp;&amp;nbsp;Url&amp;nbsp;：&amp;nbsp;&lt;a href=&quot;$&#123;BUILD_URL&#125;&quot;&gt;$&#123;BUILD_URL&#125;&lt;/a&gt;&lt;/li&gt;</div><div class="line">                &lt;li&gt;工作目录&amp;nbsp;：&amp;nbsp;&lt;a href=&quot;$&#123;PROJECT_URL&#125;workspace&quot;&gt;$&#123;PROJECT_URL&#125;workspace&lt;/a&gt;&lt;/li&gt;</div><div class="line">                &lt;li&gt;项目&amp;nbsp;&amp;nbsp;Url&amp;nbsp;：&amp;nbsp;&lt;a href=&quot;$&#123;PROJECT_URL&#125;&quot;&gt;$&#123;PROJECT_URL&#125;&lt;/a&gt;&lt;/li&gt;</div><div class="line">            &lt;/ul&gt;</div><div class="line">        &lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;&lt;b&gt;&lt;font color=&quot;#0B610B&quot;&gt;Changes Since Last</div><div class="line">            Successful Build:&lt;/font&gt;&lt;/b&gt;</div><div class="line">            &lt;hr size=&quot;2&quot; width=&quot;100%&quot; align=&quot;center&quot;/&gt;</div><div class="line">        &lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;</div><div class="line">            &lt;ul&gt;</div><div class="line">                &lt;li&gt;历史变更记录 : &lt;a href=&quot;$&#123;PROJECT_URL&#125;changes&quot;&gt;$&#123;PROJECT_URL&#125;changes&lt;/a&gt;&lt;/li&gt;</div><div class="line">            &lt;/ul&gt;</div><div class="line">        &lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line">    &lt;tr&gt;</div><div class="line">        &lt;td&gt;</div><div class="line">            &lt;ul&gt;</div><div class="line">                &lt;li&gt;Test report (if test has ran):&lt;a href=&quot;$&#123;PROJECT_URL&#125;workspace/junit-report.xml&quot;&gt;junit-report.xml&lt;/a&gt;</div><div class="line">                &lt;/li&gt;</div><div class="line">            &lt;/ul&gt;</div><div class="line">            &lt;br/&gt;</div><div class="line">            &lt;br/&gt;</div><div class="line">        &lt;/td&gt;</div><div class="line">    &lt;/tr&gt;</div><div class="line"></div><div class="line">&lt;/table&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h3 id="3-3-测试报告邮件"><a href="#3-3-测试报告邮件" class="headerlink" title="3.3 测试报告邮件"></a>3.3 测试报告邮件</h3><p>测试完成，jenkins会发送测试报告的邮件，发送邮件策略可以自定义，收件人以“，”为分隔，邮件会显示项目的构建信息，附件是被测试程序的APK包，可用于bug重现。</p>
+<p><img src="/2016/07/31/robotium自动化测试解决方案/testresult.png" alt="testresult"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>基于robotium实现的android自动化测试框架已经讲完了，包括技术介绍、操作流程和最终实现结果。这里是<a href="https://github.com/Abelzzg/AutoTestProject" target="_blank" rel="external">github上的框架源码</a>。网上有好多哥们儿在qq上问我这个框架怎么用，问为什么他那儿就跑不起来，为啥找不到mainActivity。其实我也弄了好长时间的android测试，这个框架是围绕android自动化测试的instrument工具和robotium的sdk来实现的，首先咱们得弄明白android自动化测试的运行原理，即使在没有robotium的情况下，我们也应该能写出这一系列的代码，然后将我们的自动化测试用例跑起来。我只是把robotium里面方法稍微封装了一下，然后加入了一个生成测试报告的功能，希望能给大家带来一些方便。好了，打完收工，谢谢乡亲们！</p>
 
       
 
@@ -211,6 +274,21 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">android</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">自动化测试</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -261,7 +339,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://abelzzg.com/2016/01/22/第一篇blog/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abelzzg.com/2016/07/31/robotium自动化测试解决方案/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -275,15 +353,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/01/22/helloworld/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          helloworld
-        
-      </div>
-    </a>
   
+    <a href="/2016/05/18/基于aop技术的android日志收集SDK/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">基于aop技术的android日志收集SDK</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
