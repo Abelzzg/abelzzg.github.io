@@ -6,17 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://abelzzg.com">
-  <title>Archives: 2016/3 | abelzzg</title>
+  <title>基于aop技术的android日志收集SDK | abelzzg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="this is a public blog recording some technologic personal articles.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="abelzzg">
-<meta property="og:url" content="http://abelzzg.com/archives/2016/03/index.html">
+  <meta name="description" content="应用分析–日志采集开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不到更准确概况这篇文章的标题了。所以辛苦、辛苦🙏🏻。先直接上github源码地址吧!最近需要封装一个日志收集的sdk，需要记录用户星湖，又要有高度的可定制，又不想用传统的插桩打点，因为那样对很影响开发者的心情，也会降低开发和维护的效率。SO，想到了后台的ioc，aop。去找了资深后端同学了解了一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于aop技术的android日志收集SDK">
+<meta property="og:url" content="http://abelzzg.com/2016/05/18/基于aop技术的android日志收集SDK/index.html">
 <meta property="og:site_name" content="abelzzg">
-<meta property="og:description" content="this is a public blog recording some technologic personal articles.">
+<meta property="og:description" content="应用分析–日志采集开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不到更准确概况这篇文章的标题了。所以辛苦、辛苦🙏🏻。先直接上github源码地址吧!最近需要封装一个日志收集的sdk，需要记录用户星湖，又要有高度的可定制，又不想用传统的插桩打点，因为那样对很影响开发者的心情，也会降低开发和维护的效率。SO，想到了后台的ioc，aop。去找了资深后端同学了解了一">
+<meta property="og:image" content="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/640.jpeg">
+<meta property="og:image" content="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/aop.png">
+<meta property="og:image" content="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/compilation_process.png">
+<meta property="og:updated_time" content="2017-02-23T02:29:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="abelzzg">
-<meta name="twitter:description" content="this is a public blog recording some technologic personal articles.">
+<meta name="twitter:title" content="基于aop技术的android日志收集SDK">
+<meta name="twitter:description" content="应用分析–日志采集开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不到更准确概况这篇文章的标题了。所以辛苦、辛苦🙏🏻。先直接上github源码地址吧!最近需要封装一个日志收集的sdk，需要记录用户星湖，又要有高度的可定制，又不想用传统的插桩打点，因为那样对很影响开发者的心情，也会降低开发和维护的效率。SO，想到了后台的ioc，aop。去找了资深后端同学了解了一">
+<meta name="twitter:image" content="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/640.jpeg">
   
   
     <link rel="icon" href="/favicon.png">
@@ -154,36 +159,186 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-基于aop技术的android日志收集SDK" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/03/01/anroid与服务器端保持会话方式/" class="archive-article-date">
-  	<time datetime="2016-03-01T03:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-03-01</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/03/01/anroid与服务器端保持会话方式/">anroid与服务器端保持会话方式</a>
+    <h1 class="article-title" itemprop="name">
+      基于aop技术的android日志收集SDK
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2016/05/18/基于aop技术的android日志收集SDK/" class="archive-article-date">
+  	<time datetime="2016-05-18T02:12:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-05-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="应用分析–日志采集"><a href="#应用分析–日志采集" class="headerlink" title="应用分析–日志采集"></a>应用分析–日志采集</h1><p>开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不到更准确概况这篇文章的标题了。所以辛苦、辛苦🙏🏻。先直接上<a href="">github源码地址</a>吧!最近需要封装一个日志收集的sdk，需要记录用户星湖，又要有高度的可定制，又不想用传统的插桩打点，因为那样对很影响开发者的心情，也会降低开发和维护的效率。SO，想到了后台的ioc，aop。去找了资深后端同学了解了一下aspect和怎么做注解，以前看我们老大各种自定义注解，我们用起来很是潇洒，感觉很牛逼，这次要自己做注解了，我也牛逼一回。</p>
+<h2 id="传统的应用信息采集"><a href="#传统的应用信息采集" class="headerlink" title="传统的应用信息采集"></a>传统的应用信息采集</h2><p>数据采集一般都离不开埋点插桩，但是大多数采集功能都需要手动地插入代码，标识某段操作的起点和终点。例如信息流的下拉刷新，工程师可以在第一个触摸事件时插入开始标记，然后在屏幕更新后插入结束标记。这种方法和Android Systrace工具所提供的功能类似。</p>
+<pre><code>友盟的收集方式，都是通过调用代码来实现：
+
+public void onResume() {
+    super.onResume();
+    MobclickAgent.onResume(this);
+}
+public void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
+}
+
+MobclickAgent.onProfileSignIn(&quot;userID&quot;);
+
+MobclickAgent.onProfileSignIn(&quot;WB&quot;，&quot;userID&quot;);
+
+甚至连错误统计都需要开发人员去主动调用代码
+MobclickAgent.setCatchUncaughtExceptions(false); 
+
+public static void reportError(Context context, String error)   
+//或  
+public static void reportError(Context context, Throwable e)
+</code></pre><p>这种方法有诸多弊端：</p>
+<ul>
+<li>开发者插桩的粒度决定了数据的详细程度，并导致这种方法只能检测可以预见的性能影响。比如，网络连接和响应的渲染通常会被列入数据采集需求中，但其中可能触发磁盘写入，而这个会严重拖慢速度，但你不一定会想起收集数据；</li>
+<li>Android应用经常使用多线程编程，用户交互的高度异步特点，导致很难彻底检测代码。你必须给应用中的子线程分配唯一识别符以保证数据的完整，而异步让采集器的回收变得困难；</li>
+<li>最后，一般应用的开发速度很快，代码变更很频繁，这让插入的标记也必须经常变动，而且手动插入性能检测点非常耗时且容易出错。工程师的时间不应该花费在可以自动化的事情上。而且，在一个不断变化的代码库中，确保这类检测点的正确性需要做大量的工作。</li>
+</ul>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/640.jpeg" alt="image"></p>
+<h2 id="在android采用AOP切面技术采集数据"><a href="#在android采用AOP切面技术采集数据" class="headerlink" title="在android采用AOP切面技术采集数据"></a>在android采用AOP切面技术采集数据</h2><p>参考了github上AOP在Android实现切面的项目<a href="http://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/" target="_blank" rel="external">AOPforAndroid</a>。在这里做一下简单说明：在程序运行的各个需要记录的节点进行切点的切入，记录日志的动作会在切点中进行。</p>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/aop.png" alt="image"></p>
+<p>这些切点其实是在在编译的时候通过特殊的编译程序aspectj编织进去的.程序编译完成之后，切点里就会有执行日志采集的代码。</p>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/compilation_process.png" alt="image"></p>
+<p>这个项目旨在解决以上代码侵入和维护困难等问题，使用了aspect的一个gradle插件，和aspect用于向android框架织入切点的jar包，gradle配置如下：</p>
+<pre><code>import com.android.build.gradle.LibraryPlugin
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath &apos;com.android.tools.build:gradle:0.12.+&apos;
+    classpath &apos;org.aspectj:aspectjtools:1.8.1&apos;
+  }
+}
+
+apply plugin: &apos;android-library&apos;
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile &apos;org.aspectj:aspectjrt:1.8.1&apos;
+}
+
+android {
+  compileSdkVersion 19
+  buildToolsVersion &apos;19.1.0&apos;
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+android.libraryVariants.all { variant -&gt;
+  LibraryPlugin plugin = project.plugins.getPlugin(LibraryPlugin)
+  JavaCompile javaCompile = variant.javaCompile
+  javaCompile.doLast {
+    String[] args = [&quot;-showWeaveInfo&quot;,
+                     &quot;-1.5&quot;,
+                     &quot;-inpath&quot;, javaCompile.destinationDir.toString(),
+                     &quot;-aspectpath&quot;, javaCompile.classpath.asPath,
+                     &quot;-d&quot;, javaCompile.destinationDir.toString(),
+                     &quot;-classpath&quot;, javaCompile.classpath.asPath,
+                     &quot;-bootclasspath&quot;, plugin.project.android.bootClasspath.join(File.pathSeparator)]
+
+  MessageHandler handler = new MessageHandler(true);
+  new Main().run(args, handler)
+
+  def log = project.logger
+  for (IMessage message : handler.getMessages(null, true)) {
+    switch (message.getKind()) {
+      case IMessage.ABORT:
+      case IMessage.ERROR:
+      case IMessage.FAIL:
+        log.error message.message, message.thrown
+        break;
+      case IMessage.WARNING:
+      case IMessage.INFO:
+        log.info message.message, message.thrown
+        break;
+      case IMessage.DEBUG:
+        log.debug message.message, message.thrown
+        break;
+    }
+   }
+  }
+}
+</code></pre><p>在项目中暂时只提供三种切面方式作为示例，大家可以根据自己项目需求定制自己的切面方式。</p>
+<h5 id="BehaviorAspect–用户行为"><a href="#BehaviorAspect–用户行为" class="headerlink" title="BehaviorAspect–用户行为"></a>BehaviorAspect–用户行为</h5><pre><code>private static final String POINTCUT_METHOD1 =&quot;execution(* android.view.View.OnClickListener .*(..))&quot;;
+
+private static final String POINTCUT_METHOD0 =&quot;execution(* android.view.View.OnLongClickListener .*(..))&quot;;
+
+private static final String POINTCUT_METHOD2 =&quot;execution(* android.app.Activity.onResume(..))&quot;;
+
+private static final String POINTCUT_METHOD3 =&quot;execution(* android.app.Activity.onPause(..))&quot;;
+</code></pre><h5 id="CustomerAspect–定制切面"><a href="#CustomerAspect–定制切面" class="headerlink" title="CustomerAspect–定制切面"></a>CustomerAspect–定制切面</h5><p>定制切面，首先需要注册一个注解提供给开发人员使用：</p>
+<pre><code>@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.CONSTRUCTOR, ElementType.METHOD })
+public @interface CustomerTrace {
+    String eventId();
+    String eventName();
+}
+</code></pre><p>定制切面的使用<br> @CustomerTrace(eventName = “定制事件”,eventId = “dingzhishijian”)<br>    public void emptymethod(){<br>    }</p>
+<p>然后切点指向注解标注的方法：</p>
+<pre><code>private static final String POINTCUT_METHOD =     &quot;execution(@com.abel.logservice.annotation.CustomerTrace * *(..))&quot;;
+
+private static final String POINTCUT_CONSTRUCTOR =     &quot;execution(@com.abel.logservice.annotation.CustomerTrace *.new(..))&quot;;
+</code></pre><h5 id="TimeAspect–应用耗时行为切面"><a href="#TimeAspect–应用耗时行为切面" class="headerlink" title="TimeAspect–应用耗时行为切面"></a>TimeAspect–应用耗时行为切面</h5><p>应用耗时行为切面，环切切点的方法，记录方法调用使用的时间：</p>
+<pre><code>private static final String POINTCUT_METHOD = &quot;execution(* android.app.Activity.onCreate(..))&quot;;
+
+private static final String POINTCUT_METHOD1 = &quot;execution(* android.app.Fragment.onCreateView(..))&quot;;
+</code></pre><p>耗时操作的注解必须是@Around,执行代码中需要调用processd方法，不然程序会卡住不执行。<br>    @Around(“methodAnnotatedWithTimeTrace() || methodAnnotatedWithTimeTrace1()”)<br>    public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {<br>      MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();<br>        String className = methodSignature.getDeclaringType().getName();<br>        String methodName = methodSignature.getName();<br>        LogReceiverUtils.generateBehaviorEventlog(buildLogMessage(className,methodName));<br>        final StopWatch stopWatch = new StopWatch();<br>        stopWatch.start();<br>        Object result = joinPoint.proceed();<br>        stopWatch.stop();<br>        LogReceiverUtils.generateDuringEventlog(className, methodName, String.valueOf(stopWatch.getTotalTimeMillis()));<br>        return result;<br>     }</p>
+<h5 id="日志发送记录模板"><a href="#日志发送记录模板" class="headerlink" title="日志发送记录模板"></a>日志发送记录模板</h5><p>日志的记录和发送策略在这里不做详细说明，大家可以参考友盟和bugtags，策略宗旨就是不影响用户APP的使用，不占用过多流量，最好将日志压缩存储，当处于高速网络时发送。github上我的项目不是我封装的最终项目，只是一个大体的例子，还有好多内容需要丰富和重新规整。</p>
+<p>参考文章：</p>
+<p><a href="https://github.com/android10/Android-AOPExample" target="_blank" rel="external">这位德国大帅哥的github</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -195,19 +350,88 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://abelzzg.com/2016/05/18/基于aop技术的android日志收集SDK/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2016/03/01/anroid与服务器端保持会话方式/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">anroid与服务器端保持会话方式</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+  
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -230,8 +454,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

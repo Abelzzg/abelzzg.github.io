@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://abelzzg.com/"/>
-  <updated>2017-02-23T01:53:54.000Z</updated>
+  <updated>2017-02-23T02:29:56.000Z</updated>
   <id>http://abelzzg.com/</id>
   
   <author>
@@ -16,15 +16,165 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>基于aop技术的android日志收集SDK</title>
+    <link href="http://abelzzg.com/2016/05/18/%E5%9F%BA%E4%BA%8Eaop%E6%8A%80%E6%9C%AF%E7%9A%84android%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86SDK/"/>
+    <id>http://abelzzg.com/2016/05/18/基于aop技术的android日志收集SDK/</id>
+    <published>2016-05-18T02:12:38.000Z</published>
+    <updated>2017-02-23T02:29:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="应用分析–日志采集"><a href="#应用分析–日志采集" class="headerlink" title="应用分析–日志采集"></a>应用分析–日志采集</h1><p>开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不到更准确概况这篇文章的标题了。所以辛苦、辛苦🙏🏻。先直接上<a href="">github源码地址</a>吧!最近需要封装一个日志收集的sdk，需要记录用户星湖，又要有高度的可定制，又不想用传统的插桩打点，因为那样对很影响开发者的心情，也会降低开发和维护的效率。SO，想到了后台的ioc，aop。去找了资深后端同学了解了一下aspect和怎么做注解，以前看我们老大各种自定义注解，我们用起来很是潇洒，感觉很牛逼，这次要自己做注解了，我也牛逼一回。</p>
+<h2 id="传统的应用信息采集"><a href="#传统的应用信息采集" class="headerlink" title="传统的应用信息采集"></a>传统的应用信息采集</h2><p>数据采集一般都离不开埋点插桩，但是大多数采集功能都需要手动地插入代码，标识某段操作的起点和终点。例如信息流的下拉刷新，工程师可以在第一个触摸事件时插入开始标记，然后在屏幕更新后插入结束标记。这种方法和Android Systrace工具所提供的功能类似。</p>
+<pre><code>友盟的收集方式，都是通过调用代码来实现：
+
+public void onResume() {
+    super.onResume();
+    MobclickAgent.onResume(this);
+}
+public void onPause() {
+    super.onPause();
+    MobclickAgent.onPause(this);
+}
+
+MobclickAgent.onProfileSignIn(&quot;userID&quot;);
+
+MobclickAgent.onProfileSignIn(&quot;WB&quot;，&quot;userID&quot;);
+
+甚至连错误统计都需要开发人员去主动调用代码
+MobclickAgent.setCatchUncaughtExceptions(false); 
+
+public static void reportError(Context context, String error)   
+//或  
+public static void reportError(Context context, Throwable e)
+</code></pre><p>这种方法有诸多弊端：</p>
+<ul>
+<li>开发者插桩的粒度决定了数据的详细程度，并导致这种方法只能检测可以预见的性能影响。比如，网络连接和响应的渲染通常会被列入数据采集需求中，但其中可能触发磁盘写入，而这个会严重拖慢速度，但你不一定会想起收集数据；</li>
+<li>Android应用经常使用多线程编程，用户交互的高度异步特点，导致很难彻底检测代码。你必须给应用中的子线程分配唯一识别符以保证数据的完整，而异步让采集器的回收变得困难；</li>
+<li>最后，一般应用的开发速度很快，代码变更很频繁，这让插入的标记也必须经常变动，而且手动插入性能检测点非常耗时且容易出错。工程师的时间不应该花费在可以自动化的事情上。而且，在一个不断变化的代码库中，确保这类检测点的正确性需要做大量的工作。</li>
+</ul>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/640.jpeg" alt="image"></p>
+<h2 id="在android采用AOP切面技术采集数据"><a href="#在android采用AOP切面技术采集数据" class="headerlink" title="在android采用AOP切面技术采集数据"></a>在android采用AOP切面技术采集数据</h2><p>参考了github上AOP在Android实现切面的项目<a href="http://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android/" target="_blank" rel="external">AOPforAndroid</a>。在这里做一下简单说明：在程序运行的各个需要记录的节点进行切点的切入，记录日志的动作会在切点中进行。</p>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/aop.png" alt="image"></p>
+<p>这些切点其实是在在编译的时候通过特殊的编译程序aspectj编织进去的.程序编译完成之后，切点里就会有执行日志采集的代码。</p>
+<p><img src="https://github.com/Abelzzg/AOP_LOG_CONNECTOR/raw/master/screen/compilation_process.png" alt="image"></p>
+<p>这个项目旨在解决以上代码侵入和维护困难等问题，使用了aspect的一个gradle插件，和aspect用于向android框架织入切点的jar包，gradle配置如下：</p>
+<pre><code>import com.android.build.gradle.LibraryPlugin
+import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.MessageHandler
+import org.aspectj.tools.ajc.Main
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath &apos;com.android.tools.build:gradle:0.12.+&apos;
+    classpath &apos;org.aspectj:aspectjtools:1.8.1&apos;
+  }
+}
+
+apply plugin: &apos;android-library&apos;
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile &apos;org.aspectj:aspectjrt:1.8.1&apos;
+}
+
+android {
+  compileSdkVersion 19
+  buildToolsVersion &apos;19.1.0&apos;
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+android.libraryVariants.all { variant -&gt;
+  LibraryPlugin plugin = project.plugins.getPlugin(LibraryPlugin)
+  JavaCompile javaCompile = variant.javaCompile
+  javaCompile.doLast {
+    String[] args = [&quot;-showWeaveInfo&quot;,
+                     &quot;-1.5&quot;,
+                     &quot;-inpath&quot;, javaCompile.destinationDir.toString(),
+                     &quot;-aspectpath&quot;, javaCompile.classpath.asPath,
+                     &quot;-d&quot;, javaCompile.destinationDir.toString(),
+                     &quot;-classpath&quot;, javaCompile.classpath.asPath,
+                     &quot;-bootclasspath&quot;, plugin.project.android.bootClasspath.join(File.pathSeparator)]
+
+  MessageHandler handler = new MessageHandler(true);
+  new Main().run(args, handler)
+
+  def log = project.logger
+  for (IMessage message : handler.getMessages(null, true)) {
+    switch (message.getKind()) {
+      case IMessage.ABORT:
+      case IMessage.ERROR:
+      case IMessage.FAIL:
+        log.error message.message, message.thrown
+        break;
+      case IMessage.WARNING:
+      case IMessage.INFO:
+        log.info message.message, message.thrown
+        break;
+      case IMessage.DEBUG:
+        log.debug message.message, message.thrown
+        break;
+    }
+   }
+  }
+}
+</code></pre><p>在项目中暂时只提供三种切面方式作为示例，大家可以根据自己项目需求定制自己的切面方式。</p>
+<h5 id="BehaviorAspect–用户行为"><a href="#BehaviorAspect–用户行为" class="headerlink" title="BehaviorAspect–用户行为"></a>BehaviorAspect–用户行为</h5><pre><code>private static final String POINTCUT_METHOD1 =&quot;execution(* android.view.View.OnClickListener .*(..))&quot;;
+
+private static final String POINTCUT_METHOD0 =&quot;execution(* android.view.View.OnLongClickListener .*(..))&quot;;
+
+private static final String POINTCUT_METHOD2 =&quot;execution(* android.app.Activity.onResume(..))&quot;;
+
+private static final String POINTCUT_METHOD3 =&quot;execution(* android.app.Activity.onPause(..))&quot;;
+</code></pre><h5 id="CustomerAspect–定制切面"><a href="#CustomerAspect–定制切面" class="headerlink" title="CustomerAspect–定制切面"></a>CustomerAspect–定制切面</h5><p>定制切面，首先需要注册一个注解提供给开发人员使用：</p>
+<pre><code>@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.CONSTRUCTOR, ElementType.METHOD })
+public @interface CustomerTrace {
+    String eventId();
+    String eventName();
+}
+</code></pre><p>定制切面的使用<br> @CustomerTrace(eventName = “定制事件”,eventId = “dingzhishijian”)<br>    public void emptymethod(){<br>    }</p>
+<p>然后切点指向注解标注的方法：</p>
+<pre><code>private static final String POINTCUT_METHOD =     &quot;execution(@com.abel.logservice.annotation.CustomerTrace * *(..))&quot;;
+
+private static final String POINTCUT_CONSTRUCTOR =     &quot;execution(@com.abel.logservice.annotation.CustomerTrace *.new(..))&quot;;
+</code></pre><h5 id="TimeAspect–应用耗时行为切面"><a href="#TimeAspect–应用耗时行为切面" class="headerlink" title="TimeAspect–应用耗时行为切面"></a>TimeAspect–应用耗时行为切面</h5><p>应用耗时行为切面，环切切点的方法，记录方法调用使用的时间：</p>
+<pre><code>private static final String POINTCUT_METHOD = &quot;execution(* android.app.Activity.onCreate(..))&quot;;
+
+private static final String POINTCUT_METHOD1 = &quot;execution(* android.app.Fragment.onCreateView(..))&quot;;
+</code></pre><p>耗时操作的注解必须是@Around,执行代码中需要调用processd方法，不然程序会卡住不执行。<br>    @Around(“methodAnnotatedWithTimeTrace() || methodAnnotatedWithTimeTrace1()”)<br>    public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {<br>      MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();<br>        String className = methodSignature.getDeclaringType().getName();<br>        String methodName = methodSignature.getName();<br>        LogReceiverUtils.generateBehaviorEventlog(buildLogMessage(className,methodName));<br>        final StopWatch stopWatch = new StopWatch();<br>        stopWatch.start();<br>        Object result = joinPoint.proceed();<br>        stopWatch.stop();<br>        LogReceiverUtils.generateDuringEventlog(className, methodName, String.valueOf(stopWatch.getTotalTimeMillis()));<br>        return result;<br>     }</p>
+<h5 id="日志发送记录模板"><a href="#日志发送记录模板" class="headerlink" title="日志发送记录模板"></a>日志发送记录模板</h5><p>日志的记录和发送策略在这里不做详细说明，大家可以参考友盟和bugtags，策略宗旨就是不影响用户APP的使用，不占用过多流量，最好将日志压缩存储，当处于高速网络时发送。github上我的项目不是我封装的最终项目，只是一个大体的例子，还有好多内容需要丰富和重新规整。</p>
+<p>参考文章：</p>
+<p><a href="https://github.com/android10/Android-AOPExample" target="_blank" rel="external">这位德国大帅哥的github</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;应用分析–日志采集&quot;&gt;&lt;a href=&quot;#应用分析–日志采集&quot; class=&quot;headerlink&quot; title=&quot;应用分析–日志采集&quot;&gt;&lt;/a&gt;应用分析–日志采集&lt;/h1&gt;&lt;p&gt;开始给这篇blog命名的时候就想到了一个这么长的名字，很有装逼的嫌疑，但是我确实想不
+    
+    </summary>
+    
+    
+      <category term="android" scheme="http://abelzzg.com/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
     <title>anroid与服务器端保持会话方式</title>
     <link href="http://abelzzg.com/2016/03/01/anroid%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E4%BF%9D%E6%8C%81%E4%BC%9A%E8%AF%9D%E6%96%B9%E5%BC%8F/"/>
     <id>http://abelzzg.com/2016/03/01/anroid与服务器端保持会话方式/</id>
     <published>2016-03-01T03:39:06.000Z</published>
-    <updated>2017-02-23T01:53:54.000Z</updated>
+    <updated>2017-02-23T01:58:18.000Z</updated>
     
-    <content type="html"><![CDATA[<p>#anroid与服务器端保持会话方式</p>
-<p><strong>Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.<br>这两种方式都可以通过sessionID的保存来保持和服务端的会话</strong></p>
-<p>####httpClient<br>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
+    <content type="html"><![CDATA[<h1 id="anroid与服务器端保持会话方式"><a href="#anroid与服务器端保持会话方式" class="headerlink" title="anroid与服务器端保持会话方式"></a>anroid与服务器端保持会话方式</h1><p><strong>Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.<br>这两种方式都可以通过sessionID的保存来保持和服务端的会话</strong></p>
+<h4 id="httpClient"><a href="#httpClient" class="headerlink" title="httpClient"></a>httpClient</h4><p>其实保持HttpClient的请求Session，就是保证在每次Http请求访问的请求头信息的Cookie参数中，携带同一个JSESSIONID，只要保证每次是一样的，服务器就认为是同一Session，这就保持了Seesion会话。那么这个JSESSIONID是怎么来的呢，是服务器通过响应头信息给的，服务器在给客户端设置Cookie时，会通过响应头信息中的Set-Cookie参数传递回来，只要有新设置的Cookie，就是通过这个传递过来，如果没有则是null，那么就可以在请求完之后返回的信息里读取这个Set-Cookie头信息，然后保存起来，在下次请求的时候给服务器发送过去，就实现了保持Seesion的目的。代码如下：</p>
 <pre><code>//定义储存Cookie信息
 private String cookies;
 
@@ -64,8 +214,7 @@ if (setCookieHeader != null
     }
 }
 </code></pre><p>当我们需要重新设置Seesion的时候，请求我们保存的cookie即可，这样代码就会重新获取。如果都有个账号并发备份，那么一个账号分配一个cookie变量存储即可，也就是把上面的代码放到一个如HttpManager管理的类里，每个账号的备份都可以new个HttpManager实例，这样每个账号都可以单独处理自己的Cookie，互不干扰。</p>
-<p>####HttpUrlConnection</p>
-<pre><code>获取Cookie： 
+<h4 id="HttpUrlConnection"><a href="#HttpUrlConnection" class="headerlink" title="HttpUrlConnection"></a>HttpUrlConnection</h4><pre><code>获取Cookie： 
 URL url = new URL(requrl);
 HttpURLConnection con= (HttpURLConnection) url.openConnection(); 
 // 取得sessionid. 
@@ -85,38 +234,12 @@ con.setRequestProperty(&quot;cookie&quot;, sessionid);
     
     <summary type="html">
     
-      &lt;p&gt;#anroid与服务器端保持会话方式&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Android提供Http访问的方式有两种，一种是HttpClient，一种是HttpUrlConnection.&lt;br&gt;这两种方式都可以通过sessionID的保存来保持和服务端的会话&lt;/strong&gt;&lt;
+      &lt;h1 id=&quot;anroid与服务器端保持会话方式&quot;&gt;&lt;a href=&quot;#anroid与服务器端保持会话方式&quot; class=&quot;headerlink&quot; title=&quot;anroid与服务器端保持会话方式&quot;&gt;&lt;/a&gt;anroid与服务器端保持会话方式&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;An
     
     </summary>
     
     
-      <category term="tags" scheme="http://abelzzg.com/tags/tags/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>第一篇blog</title>
-    <link href="http://abelzzg.com/2016/02/22/%E7%AC%AC%E4%B8%80%E7%AF%87blog/"/>
-    <id>http://abelzzg.com/2016/02/22/第一篇blog/</id>
-    <published>2016-02-22T08:39:06.000Z</published>
-    <updated>2017-02-23T01:53:07.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>#为什么要有自己的博客</p>
-<p>刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）</p>
-<p>##上稀土掘金</p>
-<p>去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像很高大上。里面记录了一些自己做技术的心得和总结，也有不少是跟技术无关跟心态有关的，非常有意思。逐渐就看上看这些程序猿们的文章，有点志同道合的感觉，但是比起技术来，我就是个渣，但是比起屌丝，我就是屌王。</p>
-<p>##反思自己<br>突然发现已经毕业三年了，居然没有自己的博客。刚毕业上csdn上写过几篇，可能是自己太肤浅了，毛还没长齐就想写技术博客，发现没有什么浏览量，后来也就懒得写了，再后来上csdn，发现我的文章被封了，不知道为啥，占用你们服务器的内存了吗？那我诚恳的向你们道歉！。都说技术3年是一个坎，要么默默无闻做技术宅男，要么升职加薪做上小领导。回头看看我，除了做android还凑合以外，基本没啥长处，去面试估计也不会有什么好的归宿，所以决心发奋图强开始写blog，监督自己不再虚度时光，况且程序员的职业生涯也不长，就连我妈都知道做这样要不停学习新技术，每天打电话就离不开要问我“最近有没有学习？”“还是要学一些东西的，要不然不好涨工资”。</p>
-<p>##关于写作技巧<br>从小作文写不好，但是总是能抄到，能蒙混过关，后来抄多了发现，如果哪次考试是自己写的，还能拿到比抄的作文更高一些的分数，后来就变成自己写了，虽然也写不好，但是也算是锻炼。啰嗦完了，准备deploy吧，还没有原创，先把收藏在elephant里面的技术文章copy一下吧！哎，还得转成.md格式的，心累呀……</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;#为什么要有自己的博客&lt;/p&gt;
-&lt;p&gt;刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇
-    
-    </summary>
-    
+      <category term="android" scheme="http://abelzzg.com/tags/android/"/>
     
   </entry>
   
@@ -125,11 +248,13 @@ con.setRequestProperty(&quot;cookie&quot;, sessionid);
     <link href="http://abelzzg.com/2016/02/12/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
     <id>http://abelzzg.com/2016/02/12/使用hexo遇到的坑/</id>
     <published>2016-02-12T10:19:56.000Z</published>
-    <updated>2017-02-23T01:53:44.000Z</updated>
+    <updated>2017-02-23T02:02:02.000Z</updated>
     
-    <content type="html"><![CDATA[<p>#使用hexo时遇到的坑</p>
-<p>##hexo g命令报错<br>    $hexo-blog hexo g<br>    INFO  Start processing<br>    ERROR Process failed: _posts/Helloworld.md<br>    TypeError: Cannot read property ‘offset’ of null</p>
-<p>这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错Cannot read property ‘offset’ of null，刚开始以为是node版本问题，需要更新到最新版本。也有可能是我忽略了hexo的根目录下的json代码块</p>
+    <content type="html"><![CDATA[<h1 id="使用hexo时遇到的坑"><a href="#使用hexo时遇到的坑" class="headerlink" title="使用hexo时遇到的坑"></a>使用hexo时遇到的坑</h1><h2 id="hexo-g命令报错"><a href="#hexo-g命令报错" class="headerlink" title="hexo g命令报错"></a>hexo g命令报错</h2><pre><code>$hexo-blog hexo g
+INFO  Start processing
+ERROR Process failed: _posts/Helloworld.md
+TypeError: Cannot read property &apos;offset&apos; of null
+</code></pre><p>这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错Cannot read property ‘offset’ of null，刚开始以为是node版本问题，需要更新到最新版本。也有可能是我用了yilia的主题，忽略了hexo的根目录下的json代码块</p>
 <pre><code>jsonContent:
       meta: false
       pages: false
@@ -148,9 +273,8 @@ con.setRequestProperty(&quot;cookie&quot;, sessionid);
     excerpt: false
     categories: false
     tags: true
-</code></pre><p>需要加入到 <strong>_config.yml</strong>中。最后找到原因了–根目录的_config.yml文件中时区配置我改成了timezone: Asia/Beijing，这个改回Shanghai就ok了，具体为啥，我也没弄明白。</p>
-<p>###更新node方式如下</p>
-<p>mac上OS11以后权限有所变化，输入sudo brew upgrade node命令后，会报错误提示，无法跟以前一样愉快地更新node</p>
+</code></pre><p>需要加入到 <strong>_config.yml</strong>中。最后找到原因了😄–根目录的_config.yml文件中时区配置我改成了timezone: Asia/Beijing，这个改回Shanghai就ok了，具体为啥，我也没弄明白。</p>
+<h3 id="更新node方式如下"><a href="#更新node方式如下" class="headerlink" title="更新node方式如下"></a>更新node方式如下</h3><p>mac上OS11以后权限有所变化，输入sudo brew upgrade node命令后，会报错误提示，无法跟以前一样愉快地更新node</p>
 <pre><code>Error: Running Homebrew as root is extremely dangerous and no longer supported.
 As Homebrew does not drop privileges on installation you would be giving all
 build scripts full access to your system.
@@ -171,7 +295,7 @@ build scripts full access to your system.
 第五步，再次查看本机的node.js版本：
     $ node -v
 </code></pre><p>这里的第一步和第五步完全可以省略，只是个人比较喜欢查看一下，满足自己的眼睛。第二步比较重要，有些可以省略有些就不行，一律使用准没错。如果你的sudo n stable第一还能下载node，但是下到一半就报错，然后再打一遍命令就没反应了。那也是因为os的版本太高了，做了文件读写的权限控制，所以上网搜一下怎么让sudo真正能获取root权限。这要靠你们自己动手了。</p>
-<p>##github发布后404<br>本地运行成功后，满怀希望得deploy到github，激动地打了自己的域名abelzzg.github.io,居然404了，来回又看了两边命令是不是少了什么。<br>之前我也没有注意到<a href="http://www.jianshu.com/p/465830080ea9" target="_blank" rel="external">发布hexo到github</a>的作者在写使用说明时，有一句</p>
+<h2 id="github发布后404"><a href="#github发布后404" class="headerlink" title="github发布后404"></a>github发布后404</h2><p>本地运行成功后，满怀希望得deploy到github，激动地打了自己的域名abelzzg.github.io,居然404了，来回又看了两边命令是不是少了什么。<br>之前我也没有注意到<a href="http://www.jianshu.com/p/465830080ea9" target="_blank" rel="external">发布hexo到github</a>的作者在写使用说明时，有一句</p>
 <pre><code>建立与你用户名对应的仓库，仓库名必须为【your_user_name.github.io】
 </code></pre><p>额滴个神呐，费了我好一大段功夫（其实也就10分钟），可是心累呀。然后hexo的根目录上必须写成</p>
 <pre><code>deploy:
@@ -186,13 +310,12 @@ build scripts full access to your system.
     
     <summary type="html">
     
-      &lt;p&gt;#使用hexo时遇到的坑&lt;/p&gt;
-&lt;p&gt;##hexo g命令报错&lt;br&gt;    $hexo-blog hexo g&lt;br&gt;    INFO  Start processing&lt;br&gt;    ERROR Process failed: _posts/Helloworld.md
+      &lt;h1 id=&quot;使用hexo时遇到的坑&quot;&gt;&lt;a href=&quot;#使用hexo时遇到的坑&quot; class=&quot;headerlink&quot; title=&quot;使用hexo时遇到的坑&quot;&gt;&lt;/a&gt;使用hexo时遇到的坑&lt;/h1&gt;&lt;h2 id=&quot;hexo-g命令报错&quot;&gt;&lt;a href=&quot;#hexo-g命
     
     </summary>
     
     
-      <category term="tags" scheme="http://abelzzg.com/tags/tags/"/>
+      <category term="关于博客" scheme="http://abelzzg.com/tags/%E5%85%B3%E4%BA%8E%E5%8D%9A%E5%AE%A2/"/>
     
   </entry>
   
@@ -201,14 +324,36 @@ build scripts full access to your system.
     <link href="http://abelzzg.com/2016/01/22/helloworld/"/>
     <id>http://abelzzg.com/2016/01/22/helloworld/</id>
     <published>2016-01-22T08:39:06.000Z</published>
-    <updated>2017-02-23T01:54:02.000Z</updated>
+    <updated>2017-02-23T01:58:33.000Z</updated>
     
     <summary type="html">
     
     </summary>
     
     
-      <category term="tags" scheme="http://abelzzg.com/tags/tags/"/>
+      <category term="自便吧" scheme="http://abelzzg.com/tags/%E8%87%AA%E4%BE%BF%E5%90%A7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第一篇正式blog</title>
+    <link href="http://abelzzg.com/2016/01/22/%E7%AC%AC%E4%B8%80%E7%AF%87blog/"/>
+    <id>http://abelzzg.com/2016/01/22/第一篇blog/</id>
+    <published>2016-01-22T08:39:06.000Z</published>
+    <updated>2017-02-23T02:02:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="为什么要有自己的博客"><a href="#为什么要有自己的博客" class="headerlink" title="为什么要有自己的博客"></a>为什么要有自己的博客</h2><p>刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构变动很大，暂时还没有什么活干（因为年前冲绩效都干完了），不少同事选择了离职，撩得我也春心荡漾，想着能趁这个机会好好学习学习，总结巩固之前做的东西，然后…然后…哇哈哈（让我YY一下）</p>
+<h2 id="上稀土掘金"><a href="#上稀土掘金" class="headerlink" title="上稀土掘金"></a>上稀土掘金</h2><p>去年开始天天刷稀土掘金，把黄易给卸载了，太浪费时间。掘金上发现好多大神都有自己的私人博客，有的甚至买了域名，好像很高大上。里面记录了一些自己做技术的心得和总结，也有不少是跟技术无关跟心态有关的，非常有意思。逐渐就看上看这些程序猿们的文章，有点志同道合的感觉，但是比起技术来，我就是个渣，但是比起屌丝，我就是屌王。</p>
+<h2 id="反思自己"><a href="#反思自己" class="headerlink" title="反思自己"></a>反思自己</h2><p>突然发现已经毕业三年了，居然没有自己的博客。刚毕业上csdn上写过几篇，可能是自己太肤浅了，毛还没长齐就想写技术博客，发现没有什么浏览量，后来也就懒得写了，再后来上csdn，发现我的文章被封了，不知道为啥，占用你们服务器的内存了吗？那我诚恳的向你们道歉！。都说技术3年是一个坎，要么默默无闻做技术宅男，要么升职加薪做上小领导。回头看看我，除了做android还凑合以外，基本没啥长处，去面试估计也不会有什么好的归宿，所以决心发奋图强开始写blog，监督自己不再虚度时光，况且程序员的职业生涯也不长，就连我妈都知道做这样要不停学习新技术，每天打电话就离不开要问我“最近有没有学习？”“还是要学一些东西的，要不然不好涨工资”。</p>
+<h2 id="关于写作技巧"><a href="#关于写作技巧" class="headerlink" title="关于写作技巧"></a>关于写作技巧</h2><p>从小作文写不好，但是总是能抄到，能蒙混过关，后来抄多了发现，如果哪次考试是自己写的，还能拿到比抄的作文更高一些的分数，后来就变成自己写了，虽然也写不好，但是也算是锻炼。啰嗦完了，准备deploy吧，还没有原创，先把收藏在elephant里面的技术文章copy一下吧！哎，还得转成.md格式的，心累呀……</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;为什么要有自己的博客&quot;&gt;&lt;a href=&quot;#为什么要有自己的博客&quot; class=&quot;headerlink&quot; title=&quot;为什么要有自己的博客&quot;&gt;&lt;/a&gt;为什么要有自己的博客&lt;/h2&gt;&lt;p&gt;刚过完年回来，又是技术界的多事之春，金三银四的日子马上又要来了。公司组织架构
+    
+    </summary>
+    
     
   </entry>
   

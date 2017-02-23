@@ -8,22 +8,28 @@
   <link rel="dns-prefetch" href="http://abelzzg.com">
   <title>使用hexo遇到的坑 | abelzzg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="#使用hexo时遇到的坑
-##hexo g命令报错    $hexo-blog hexo g    INFO  Start processing    ERROR Process failed: _posts/Helloworld.md    TypeError: Cannot read property ‘offset’ of null
-这个问题就牛逼了，各种google、百度，用命令hexo">
+  <meta name="description" content="使用hexo时遇到的坑hexo g命令报错$hexo-blog hexo g
+INFO  Start processing
+ERROR Process failed: _posts/Helloworld.md
+TypeError: Cannot read property &amp;apos;offset&amp;apos; of null
+这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用hexo遇到的坑">
 <meta property="og:url" content="http://abelzzg.com/2016/02/12/使用hexo遇到的坑/index.html">
 <meta property="og:site_name" content="abelzzg">
-<meta property="og:description" content="#使用hexo时遇到的坑
-##hexo g命令报错    $hexo-blog hexo g    INFO  Start processing    ERROR Process failed: _posts/Helloworld.md    TypeError: Cannot read property ‘offset’ of null
-这个问题就牛逼了，各种google、百度，用命令hexo">
-<meta property="og:updated_time" content="2017-02-23T01:53:44.000Z">
+<meta property="og:description" content="使用hexo时遇到的坑hexo g命令报错$hexo-blog hexo g
+INFO  Start processing
+ERROR Process failed: _posts/Helloworld.md
+TypeError: Cannot read property &amp;apos;offset&amp;apos; of null
+这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错C">
+<meta property="og:updated_time" content="2017-02-23T02:02:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用hexo遇到的坑">
-<meta name="twitter:description" content="#使用hexo时遇到的坑
-##hexo g命令报错    $hexo-blog hexo g    INFO  Start processing    ERROR Process failed: _posts/Helloworld.md    TypeError: Cannot read property ‘offset’ of null
-这个问题就牛逼了，各种google、百度，用命令hexo">
+<meta name="twitter:description" content="使用hexo时遇到的坑hexo g命令报错$hexo-blog hexo g
+INFO  Start processing
+ERROR Process failed: _posts/Helloworld.md
+TypeError: Cannot read property &amp;apos;offset&amp;apos; of null
+这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错C">
   
   
     <link rel="icon" href="/favicon.png">
@@ -181,9 +187,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>#使用hexo时遇到的坑</p>
-<p>##hexo g命令报错<br>    $hexo-blog hexo g<br>    INFO  Start processing<br>    ERROR Process failed: _posts/Helloworld.md<br>    TypeError: Cannot read property ‘offset’ of null</p>
-<p>这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错Cannot read property ‘offset’ of null，刚开始以为是node版本问题，需要更新到最新版本。也有可能是我忽略了hexo的根目录下的json代码块</p>
+        <h1 id="使用hexo时遇到的坑"><a href="#使用hexo时遇到的坑" class="headerlink" title="使用hexo时遇到的坑"></a>使用hexo时遇到的坑</h1><h2 id="hexo-g命令报错"><a href="#hexo-g命令报错" class="headerlink" title="hexo g命令报错"></a>hexo g命令报错</h2><pre><code>$hexo-blog hexo g
+INFO  Start processing
+ERROR Process failed: _posts/Helloworld.md
+TypeError: Cannot read property &apos;offset&apos; of null
+</code></pre><p>这个问题就牛逼了，各种google、百度，用命令hexo g 时，报错Cannot read property ‘offset’ of null，刚开始以为是node版本问题，需要更新到最新版本。也有可能是我用了yilia的主题，忽略了hexo的根目录下的json代码块</p>
 <pre><code>jsonContent:
       meta: false
       pages: false
@@ -202,9 +210,8 @@
     excerpt: false
     categories: false
     tags: true
-</code></pre><p>需要加入到 <strong>_config.yml</strong>中。最后找到原因了–根目录的_config.yml文件中时区配置我改成了timezone: Asia/Beijing，这个改回Shanghai就ok了，具体为啥，我也没弄明白。</p>
-<p>###更新node方式如下</p>
-<p>mac上OS11以后权限有所变化，输入sudo brew upgrade node命令后，会报错误提示，无法跟以前一样愉快地更新node</p>
+</code></pre><p>需要加入到 <strong>_config.yml</strong>中。最后找到原因了😄–根目录的_config.yml文件中时区配置我改成了timezone: Asia/Beijing，这个改回Shanghai就ok了，具体为啥，我也没弄明白。</p>
+<h3 id="更新node方式如下"><a href="#更新node方式如下" class="headerlink" title="更新node方式如下"></a>更新node方式如下</h3><p>mac上OS11以后权限有所变化，输入sudo brew upgrade node命令后，会报错误提示，无法跟以前一样愉快地更新node</p>
 <pre><code>Error: Running Homebrew as root is extremely dangerous and no longer supported.
 As Homebrew does not drop privileges on installation you would be giving all
 build scripts full access to your system.
@@ -225,7 +232,7 @@ build scripts full access to your system.
 第五步，再次查看本机的node.js版本：
     $ node -v
 </code></pre><p>这里的第一步和第五步完全可以省略，只是个人比较喜欢查看一下，满足自己的眼睛。第二步比较重要，有些可以省略有些就不行，一律使用准没错。如果你的sudo n stable第一还能下载node，但是下到一半就报错，然后再打一遍命令就没反应了。那也是因为os的版本太高了，做了文件读写的权限控制，所以上网搜一下怎么让sudo真正能获取root权限。这要靠你们自己动手了。</p>
-<p>##github发布后404<br>本地运行成功后，满怀希望得deploy到github，激动地打了自己的域名abelzzg.github.io,居然404了，来回又看了两边命令是不是少了什么。<br>之前我也没有注意到<a href="http://www.jianshu.com/p/465830080ea9" target="_blank" rel="external">发布hexo到github</a>的作者在写使用说明时，有一句</p>
+<h2 id="github发布后404"><a href="#github发布后404" class="headerlink" title="github发布后404"></a>github发布后404</h2><p>本地运行成功后，满怀希望得deploy到github，激动地打了自己的域名abelzzg.github.io,居然404了，来回又看了两边命令是不是少了什么。<br>之前我也没有注意到<a href="http://www.jianshu.com/p/465830080ea9" target="_blank" rel="external">发布hexo到github</a>的作者在写使用说明时，有一句</p>
 <pre><code>建立与你用户名对应的仓库，仓库名必须为【your_user_name.github.io】
 </code></pre><p>额滴个神呐，费了我好一大段功夫（其实也就10分钟），可是心累呀。然后hexo的根目录上必须写成</p>
 <pre><code>deploy:
@@ -270,7 +277,7 @@ build scripts full access to your system.
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tags</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">关于博客</a>
         		</li>
       		
 		</ul>
@@ -340,11 +347,11 @@ build scripts full access to your system.
   
 <nav id="article-nav">
   
-    <a href="/2016/02/22/第一篇blog/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/03/01/anroid与服务器端保持会话方式/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          第一篇blog
+          anroid与服务器端保持会话方式
         
       </div>
     </a>
@@ -455,7 +462,15 @@ build scripts full access to your system.
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tags</a>
+                <a href="javascript:void(0)" class="js-tag color4">自便吧</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">关于博客</a>
               </li>
             
             <div class="clearfix"></div>
